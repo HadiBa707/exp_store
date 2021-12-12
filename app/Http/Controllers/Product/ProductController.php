@@ -7,6 +7,7 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Builder;
 
 class ProductController extends ApiController
 {
@@ -16,9 +17,26 @@ class ProductController extends ApiController
         //Deleting expired products
         Product::where('expiration_date', '<', Carbon::now())->delete();
 
-        $products = Product::all();
+        $products = Product::query();
+        //searching
+        if (request()->has('name')) {
+            $serachValue = request()->name;
+            $products = $products->where('name', 'LIKE', "%{$serachValue}%");
+        }
+        if (request()->has('date')) {
+            $serachValue = request()->date;
+            $products = $products->where('expiration_date', $serachValue);
+        }
+        if (request()->has('category')) {
+            $serachValue = request()->category;
+            $products = $products->whereHas('categories', function ($query) use ($serachValue) {
+                    $query->where('id', $serachValue);
+            });
+        }
+        $products = $products->get();
         return $this->showAll($products);
     }
+
 
     public function show(Product $product)
     {

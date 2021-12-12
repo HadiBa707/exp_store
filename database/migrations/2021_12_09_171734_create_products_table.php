@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
-            $table->timestamp('expiration_date');
+            $table->date('expiration_date');
             $table->string('contact_info');
             $table->integer('quantity')->unsigned();
             $table->double('price')->unsigned();
