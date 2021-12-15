@@ -50,3 +50,14 @@ Route::resource('products', App\Http\Controllers\Product\ProductController::clas
  */
 Route::resource('categories', App\Http\Controllers\Category\CategoryController::class, ['except' => ['edit', 'create']]);
 
+/**
+ *Likes
+ */
+Route::post('products/{product}/like', [App\Http\Controllers\Like\LikeController::class, 'addLike']);
+Route::delete('products/{product}/deleteLike', [App\Http\Controllers\Like\LikeController::class, 'deleteLike']);
+
+/**
+ *Comments
+ */
+Route::post('products/{product}/comment', [App\Http\Controllers\Comment\CommentController::class, 'addComment']);
+Route::delete('products/{product}/deleteComment', [App\Http\Controllers\Comment\CommentController::class, 'deleteComment']);

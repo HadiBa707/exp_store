@@ -14,6 +14,7 @@ class ProductController extends ApiController
 
     public function index()
     {
+        //TODO work on queue
         //Deleting expired products
         Product::where('expiration_date', '<', Carbon::now())->delete();
 
