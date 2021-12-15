@@ -14,7 +14,13 @@ class CommentController extends ApiController
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api', ['except' => ['index']]);
+    }
+
+    public function index(Product $product) {
+        $comments = Comment::where('product_id', $product->id)->get();
+
+        return $this->showAll($comments);
     }
 
     public function addComment(Request $request, Product $product) {

@@ -59,5 +59,6 @@ Route::delete('products/{product}/deleteLike', [App\Http\Controllers\Like\LikeCo
 /**
  *Comments
  */
-Route::post('products/{product}/comment', [App\Http\Controllers\Comment\CommentController::class, 'addComment']);
-Route::delete('products/{product}/deleteComment', [App\Http\Controllers\Comment\CommentController::class, 'deleteComment']);
+Route::get('products/{product}/comments', [App\Http\Controllers\Comment\CommentController::class, 'index']);
+Route::post('products/{product}/create/comment', [App\Http\Controllers\Comment\CommentController::class, 'addComment']);
+Route::delete('products/{product}/delete/comment', [App\Http\Controllers\Comment\CommentController::class, 'deleteComment']);
