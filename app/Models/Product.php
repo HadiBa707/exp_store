@@ -23,7 +23,8 @@ class Product extends Model
         'expiration_date',
         'contact_info',
         'quantity',
-        'price'
+        'price',
+        'views',
     ];
 
     public function user() {

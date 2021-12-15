@@ -40,6 +40,14 @@ class ProductController extends ApiController
 
     public function show(Product $product)
     {
+        if (Auth::user()) {
+            $updatedViews = $product->views + 1;
+            $product->fill([
+                'views' => $updatedViews,
+            ]);
+            $product->save();
+        }
+
         return $this->showOne($product);
     }
 }

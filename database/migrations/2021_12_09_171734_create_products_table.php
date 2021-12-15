@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->double('price')->unsigned();
 //            $table->integer('user_id')->unsigned();
             $table->foreignId('user_id')->constrained('users');
+            $table->integer('views')->default(0);
             $table->timestamps();
             $table->softDeletes(); //deleted_at
         });
