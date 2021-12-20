@@ -32,7 +32,6 @@ class UserProductController extends ApiController
     {
         $user = Auth::user();
 
-        //TODO does the image required? 'image' => 'required|image'
         $rules = [
             'name' => 'required',
             'expiration_date' => 'required',
@@ -44,16 +43,16 @@ class UserProductController extends ApiController
             'categories.*' => 'exists:categories,id',
 
             'discount1' => 'between:1,99|required',
-            'date1start' => 'date|required',
-            'date1end' => 'date|required',
+            'date1start' => 'required',
+            'date1end' => 'required',
 
             'discount2' => 'between:1,99|required',
-            'date2start' => 'date|required',
-            'date2end' => 'date|required',
+            'date2start' => 'required',
+            'date2end' => 'required',
 
             'discount3' => 'between:1,99|required',
-            'date3start' => 'date|required',
-            'date3end' => 'date|required',
+            'date3start' => 'required',
+            'date3end' => 'required',
 
         ];
 
@@ -85,9 +84,7 @@ class UserProductController extends ApiController
         ]);
 
         $product->prices()->saveMany([$price1, $price2, $price3]);
-
-        //TODO try to return the new product
-        return response()->json('done');
+        return $this->showOne($product);
     }
 
 
@@ -100,29 +97,23 @@ class UserProductController extends ApiController
             'quantity' => 'integer|min:1',
             'price' => 'min:1',
             'image' => 'image',
+//            'categories' => 'array',
+//            'categories.*' => 'exists:categories,id',
         ];
 
         $this->validate($request, $rules);
         $this->checkUser($user, $product);
 
-        $product->fill($request->only([
-            'name',
-            'contact_info',
-            'quantity',
-            'price',
-        ]));
+        $data = $request->all();
+
+        $product->categories()->attach($request['categories']);
+        $product->update($data);
 
         if ($request->hasFile('image')) {
             Storage::delete($product->image);
 
             $product->image = $request->image->store('');
         }
-
-        if ($product->isClean()) {
-            return $this->errorResponse('You need to specify different values to update', 422);
-        }
-
-        $product->save();
 
         return $this->showOne($product);
     }

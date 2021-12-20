@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\ProductJob;
 use App\Models\Category;
 use App\Models\Price;
 use App\Models\Product;
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
                 $categories = Category::all()->random(mt_rand(1, 5))->pluck('id');
                 $product->categories()->attach($categories);
                 $product->prices()->saveMany(Price::factory()->count(3)->make());
+//                ProductJob::dispatch($product);
 //                $prices = Price::all()->random(3)->pluck('id');
 //                $product->prices()->attach($prices);
             });

@@ -20,7 +20,6 @@ class LikeController extends ApiController
     public function addLike (Product $product) {
         $user = Auth::user();
 
-//        dd(Like::where('user_id', $user->id)->where('product_id', $product->id)->get());
         if (Like::where('user_id', $user->id)->where('product_id', $product->id)->count() == 0) {
             Like::create([
                 'user_id' => $user->id,
@@ -33,8 +32,10 @@ class LikeController extends ApiController
 
     public function deleteLike(Product $product) {
         $user = Auth::user();
-        Like::where('user_id', $user->id)->where('product_id', $product->id)->delete();
 
-        return response()->json(['message' => 'Deleted Like']);
+        if (Like::where('user_id', $user->id)->where('product_id', $product->id)->delete()) {
+            return response()->json(['message' => 'Deleted Like']);
+        }
+        return response()->json(['message' => 'Couldn\'t delete the like']);
     }
 }

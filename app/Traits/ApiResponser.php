@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -26,14 +27,11 @@ trait ApiResponser
 
     protected function sortData(Collection $collection) {
         if (request()->has('sort_by_asc')) {
-            $attribute = request()->sort_by_asc;
-            $collection = $collection->sortBy->{$attribute};
+            $collection = Product::orderBy(request()->sort_by_asc, 'asc')->get();
         }
         if (request()->has('sort_by_desc')) {
-            $attribute = request()->sort_by_desc;
-            $collection = $collection->sortByDesc->{$attribute};
+            $collection = Product::orderBy(request()->sort_by_desc, 'desc')->get();
         }
-
         return $collection;
     }
 }

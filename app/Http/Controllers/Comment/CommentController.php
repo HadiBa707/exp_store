@@ -42,12 +42,14 @@ class CommentController extends ApiController
 
     }
 
-    public function deleteComment(Product $product) {
+    public function deleteComment(Comment $comment) {
         $user = Auth::user();
 
-        $comment = Comment::where('user_id', $user->id)->where('product_id', $product->id)->delete();
+        if (Comment::where('user_id', $user->id)->where('id', $comment->id)->delete()) {
+            return response()->json(['message' => 'deleted']);
+        }
 
-        return response()->json(['message' => 'deleted']);
+        return response()->json(['message' => 'failed to delete']);
     }
 
 

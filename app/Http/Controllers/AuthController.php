@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
     /**
      * Create a new AuthController instance.
@@ -42,7 +43,7 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        return response()->json(['date' => $data]);
+        return response()->json(['data' => $data]);
     }
 
     /**
@@ -58,7 +59,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $user = Auth::user();
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -100,12 +102,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user)
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        $data = [
+            'user' => $user,
+            'token' => $token,
+        ];
+        return response()->json(['data' => $data]);
     }
 }
