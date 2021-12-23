@@ -92,7 +92,7 @@ class AuthController extends ApiController
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh(), null);
     }
 
     /**

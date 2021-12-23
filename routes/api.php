@@ -34,8 +34,8 @@ Route::group([
  */
 Route::group(['prefix' => 'user'], function () {
     Route::get('products', [App\Http\Controllers\User\UserProductController::class, 'index']);
-    Route::post('create/product', [App\Http\Controllers\User\UserProductController::class, 'store']); //TODO
-    Route::put('update/product/{product}', [App\Http\Controllers\User\UserProductController::class, 'update']); //TODO
+    Route::post('create/product', [App\Http\Controllers\User\UserProductController::class, 'store']);
+    Route::put('update/product/{product}', [App\Http\Controllers\User\UserProductController::class, 'update']);
     Route::delete('delete/product/{product}', [App\Http\Controllers\User\UserProductController::class, 'destroy']);
     Route::get('likes', [App\Http\Controllers\User\UserLikeController::class, 'index']);
 });

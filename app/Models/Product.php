@@ -12,6 +12,10 @@ class Product extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $with = [
+        'categories',
+    ];
+
     protected $dates = [
         'deleted_at',
     ];

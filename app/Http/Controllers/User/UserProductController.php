@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Price;
 use App\Models\Product;
 use App\Models\User;
@@ -23,6 +21,7 @@ class UserProductController extends ApiController
     public function index()
     {
         $user = Auth::user();
+
         $products = $user->products;
 
         return $this->showAll($products);
@@ -38,7 +37,7 @@ class UserProductController extends ApiController
             'contact_info' => 'required',
             'quantity' => 'required|integer|min:1',
             'price' => 'required|min:1',
-            'image' => 'image', //TODO is it Required?
+            'image' => 'image',
             'categories' => 'array',
             'categories.*' => 'exists:categories,id',
 
@@ -60,7 +59,7 @@ class UserProductController extends ApiController
 
         $data = $request->all();
 
-        $data['image'] = $request->image->store('');
+        $data['image'] = $request->image->store('/public');
 
         $product = new Product($data);
         $user->products()->saveMany([$product]);
@@ -92,13 +91,12 @@ class UserProductController extends ApiController
     {
         $user = Auth::user();
 
-        //TODO does the image required? 'image' => 'required|image'
         $rules = [
             'quantity' => 'integer|min:1',
             'price' => 'min:1',
             'image' => 'image',
-//            'categories' => 'array',
-//            'categories.*' => 'exists:categories,id',
+            'categories' => 'array',
+            'categories.*' => 'exists:categories,id',
         ];
 
         $this->validate($request, $rules);
@@ -107,12 +105,33 @@ class UserProductController extends ApiController
         $data = $request->all();
 
         $product->categories()->attach($request['categories']);
+
+        $product->prices()->delete();
+        $price1 = new Price([
+            'discount' => $data['discount1'],
+            'date_start' => $data['date1start'],
+            'date_end' => $data['date1end']
+        ]);
+        $price2 = new Price([
+            'discount' => $data['discount2'],
+            'date_start' => $data['date2start'],
+            'date_end' => $data['date2end']
+        ]);
+
+        $price3 = new Price([
+            'discount' => $data['discount3'],
+            'date_start' => $data['date3start'],
+            'date_end' => $data['date3end']
+        ]);
+
+        $product->prices()->saveMany([$price1, $price2, $price3]);
+
         $product->update($data);
 
         if ($request->hasFile('image')) {
             Storage::delete($product->image);
 
-            $product->image = $request->image->store('');
+            $product->image = $request->image->store('/public');
         }
 
         return $this->showOne($product);
