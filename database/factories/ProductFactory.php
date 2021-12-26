@@ -23,6 +23,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(10,1000),
             'contact_info' => $this->faker->phoneNumber,
             'user_id' => User::all()->random()->id,
+            'views' => $this->faker->numberBetween(1,50),
         ];
     }
 }
