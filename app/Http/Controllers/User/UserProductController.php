@@ -86,7 +86,7 @@ class UserProductController extends ApiController
         return $this->showOne($product);
     }
 
-
+//TODO check update tomorrow
     public function update(Request $request, Product $product)
     {
         $user = Auth::user();
@@ -94,9 +94,9 @@ class UserProductController extends ApiController
         $rules = [
             'quantity' => 'integer|min:1',
             'price' => 'min:1',
-            'image' => 'image',
-            'categories' => 'array',
-            'categories.*' => 'exists:categories,id',
+//            'image' => 'image',
+//            'categories' => 'array',
+//            'categories.*' => 'exists:categories,id',
         ];
 
         $this->validate($request, $rules);
@@ -104,7 +104,8 @@ class UserProductController extends ApiController
 
         $data = $request->all();
 
-        $product->categories()->attach($request['categories']);
+        $data['categories'] = explode(',',$data['categories']);
+        $product->categories()->attach($data['categories']);
 
         $product->prices()->delete();
         $price1 = new Price([
