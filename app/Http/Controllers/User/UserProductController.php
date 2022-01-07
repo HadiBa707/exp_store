@@ -37,9 +37,9 @@ class UserProductController extends ApiController
             'contact_info' => 'required',
             'quantity' => 'required|integer|min:1',
             'price' => 'required|min:1',
-            'image' => 'image',
-            'categories' => 'array',
-            'categories.*' => 'exists:categories,id',
+//            'image' => 'image',
+//            'categories' => 'array',
+//            'categories.*' => 'exists:categories,id',
 
             'discount1' => 'between:1,99|required',
             'date1start' => 'required',
@@ -58,9 +58,9 @@ class UserProductController extends ApiController
         $this->validate($request, $rules);
 
         $data = $request->all();
+        $data['categories'] = explode(',',$data['categories']);
 
         $data['image'] = $request->image->store('/public');
-
         $product = new Product($data);
         $user->products()->saveMany([$product]);
         $product->categories()->attach($data['categories']);

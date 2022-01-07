@@ -53,6 +53,6 @@ class Product extends Model
             $offerPrice = $price - ($price/100) * ($discount['discount']);
             return $offerPrice;
         }
-        return int($price);
+        return $price;
     }
 }
