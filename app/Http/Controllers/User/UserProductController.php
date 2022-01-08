@@ -127,13 +127,15 @@ class UserProductController extends ApiController
 
         $product->prices()->saveMany([$price1, $price2, $price3]);
 
-        $product->update($data);
 
         if ($request->hasFile('image')) {
             Storage::delete($product->image);
 
-            $product->image = $request->image->store('/public');
+//           $data['image'] =  $product->image = $request->image->store('/public');
+            $data['image'] = $request->image->store('/public');
         }
+
+        $product->update($data);
 
         return $this->showOne($product);
     }
